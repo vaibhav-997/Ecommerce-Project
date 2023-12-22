@@ -30,6 +30,9 @@ This Ecommerce Project is a comprehensive solution with authentication features,
   
 - **Mobile Optimization**: The mobile responsiveness of the UI can be improved. Ensure a seamless user experience on various devices by optimizing the layout for smaller screens.
 
+*Note:* I am still working this missing features If any suggestions or any improvements in the project please let me know about it. You can reach me by the email link below in the contact section
+
+
 ## Security
 
 - **Secured Routes**: After login, the login and signup routes are not accessible, ensuring the security of user authentication.
