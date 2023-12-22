@@ -1,0 +1,47 @@
+# Node.js
+/node_modules
+
+# macOS
+.DS_Store
+
+# JetBrains IDEs
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Node package manager
+npm-debug.log
+
+# Log files
+*.log
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependency directories
+/pnpm-debug.log
+/test-results/
+
+# TypeScript
+*.tsbuildinfo
+
+# Yarn
+/yarn-error.log
+/.pnp
+.pnp.js
+
+# Optional: Exclude built files
+/build/
+/dist/
+/out/
+
+# Optional: Exclude local configuration files
+/.env.local
+/.env.development.local
+/.env.test.local
+/.env.production.local
