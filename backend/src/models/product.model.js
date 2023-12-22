@@ -41,13 +41,7 @@ const productSchema = new Schema({
     type: String, // Corrected type to String
     unique: true, // Ensuring uniqueness for the slug
   },
-  productRatings: [{
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    rating: {
-      type: Number,
-    },
-  }],
+  
 }, { timestamps: true });
 
 // productSchema.index({ productName: 'text', productCompany: 'text' });

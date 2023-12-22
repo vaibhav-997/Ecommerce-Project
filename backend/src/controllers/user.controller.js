@@ -4,6 +4,7 @@ import Joi from 'joi';
 import bcrypt from 'bcryptjs'
 
 import jwt from 'jsonwebtoken'
+import { deleteExistingCloudinaryImage } from '../utils/deleteCloudinaryExistingimage.js';
 
 // Validating the request body for registration 
 const userRegistrationValidation = (username, email, password) => {
@@ -266,8 +267,11 @@ static async updateUserAvatar(req, res){
     let avatarImage = req.file
     if(!avatarImage) return res.json({success:false, message:"Avatar required"})
     let updatedAvatarImage = await uploadToCloudinary(avatarImage.path)
+  
+  
     let updatedUser =   await User.findByIdAndUpdate(user._id,{avatar:updatedAvatarImage.secure_url},{new:true})
     if(!updatedUser) return res.json({success:false, message:"User not found"})
+    await deleteExistingCloudinaryImage(updatedUser?.avatar)
     return res.json({success:true, message:"User avatar updated successfully", })
   } catch (error) {
     return res.json({success:false, message:"Avatar updation failed"})

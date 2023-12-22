@@ -1,7 +1,9 @@
 import { Product } from "../models/product.model.js";
 import Joi from 'joi';
 import {uploadToCloudinary} from '../utils/cloudinary.js'
-import mongoose from 'mongoose'
+import { deleteExistingCloudinaryImage } from "../utils/deleteCloudinaryExistingimage.js";
+import { Comments } from "../models/comment.model.js";
+
 
 const productValidation  = Joi.object({
     productName: Joi.string().max(100).min(3).required(),
@@ -127,6 +129,10 @@ class ProductController {
             if(!updatedProduct){
                 return res.json({success:false, message:"product updation failed! Invalid id"})
             }
+
+            for(let i = 0; i<updatedProduct.productImage.length; i++){
+                await deleteExistingCloudinaryImage(updatedProduct.productImage[i])
+            }
             return res.json({success:true, message:"Images updated successfully", payload:updatedProduct});
         } catch (error) {
             return res.json({success:false, message:"Updation failed! Error"})
@@ -238,17 +244,52 @@ class ProductController {
         }
     }
 
-//    delete product by id
-static async deleteProductById (req, res){
-    try {
-        const id = req.params.id
-        await Product.findByIdAndDelete(id)
-        return res.json({ success:true, message:"Product deleted successfully"})
-    } catch (error) {
-        return res.json({ success:false, message:"Error deleting the product"})
+    //    delete product by id
+    static async deleteProductById (req, res){
+        try {
+            const id = req.params.id
+            await Product.findByIdAndDelete(id)
+            return res.json({ success:true, message:"Product deleted successfully"})
+        } catch (error) {
+            return res.json({ success:false, message:"Error deleting the product"})
+        }
     }
-}
+
+    // Add comments to product
+    static async addComment (req, res){
+        try {
+            const id = req.params.id
+        const user = req.user
+        const {comment} = req.body
+       
+        if(!comment) return res.json({ success:false, message:"Comment can not be empty"})
+        const product = await Product.findById(id)
+        const comments = await Comments.create({comments:comment,user:user._id, product:product._id})
+
+        if(!comments){
+            return res.json({ success:false, message:"Error creating comment"})
+        }
+
+        return res.json({ success:true, message:"Comment added successfully"})
+        } catch (error) {
+            return res.json({success:false, message:"error while adding comment"})
+        }
+    }
+
+    // showing comments to the product
+    static async getComments(req, res){
+        try {
+            const id = req.params.id
+            const comments = await Comments.find({product:id}).populate("user")
+            if(!comments){
+                return res.json({ success:false, message:"Comments not found"})
     
+            }
+            return res.json({success:true, message:comments.length>0 ? "Comments found successfully":"This product dont have any comments", payload:comments})
+        } catch (error) {
+            return res.json({success:false, message:"error while fetching comments"})
+        }
+    }
 }
 
 export { ProductController };

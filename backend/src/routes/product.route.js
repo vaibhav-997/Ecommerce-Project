@@ -16,7 +16,8 @@ router.get('/product/:id',ProductController.getProductById)
 router.patch('/update-product/:id',authUser,ProductController.updateProduct )
 router.patch('/update-productImages/:id',authUser,upload.array("productImage",3),ProductController.updateProductImages )
 router.delete('/delete-product/:id',authUser,ProductController.deleteProductById )
-
+router.post('/comment/:id', authUser,ProductController.addComment)
+router.get('/comments/:id', authUser,ProductController.getComments)
 
 
 
