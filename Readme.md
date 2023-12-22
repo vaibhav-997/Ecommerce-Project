@@ -38,8 +38,8 @@ This Ecommerce Project is a comprehensive solution with authentication features,
 
 ### Installation
 
-1. Clone the repository: `git clone https://github.com/yourusername/ecommerce-project.git`
-2. Navigate to the project directory: `cd ecommerce-project`
+1. Clone the repository: `git clone  https://github.com/vaibhav-997/Ecommerce-Project.git`
+2. Navigate to the project directory
 3. Install dependencies for both frontend and backend: `npm install`
 4. Configure environment variables for MongoDB and Cloudinary.
 5. Start the backend server: `npm run start`
@@ -58,7 +58,8 @@ Contributions are welcome! Feel free to open issues or pull requests.
 
 ## Frontend Images
 
-_Add screenshots or visual representations of your frontend here._
+Frontend images are added to the images folder
+
 
 ## Contact
 
