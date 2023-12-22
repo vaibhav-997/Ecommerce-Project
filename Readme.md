@@ -30,6 +30,12 @@ This Ecommerce Project is a comprehensive solution with authentication features,
   
 - **Mobile Optimization**: The mobile responsiveness of the UI can be improved. Ensure a seamless user experience on various devices by optimizing the layout for smaller screens.
 
+## Security
+
+- **Secured Routes**: After login, the login and signup routes are not accessible, ensuring the security of user authentication.
+
+- **Admin-Only Routes**: Normal users cannot access the "Add Product" route and update/delete functionalities, ensuring that only authorized admins can perform these actions.
+
 ## About Me
 
 I'm passionate about full-stack development with a focus on backend technologies. While my expertise lies in backend development, I'm actively working to enhance my frontend skills to become a well-rounded developer. This project is a testament to my dedication to continuous learning and improvement.
@@ -68,7 +74,7 @@ Contributions are welcome! Feel free to open issues or pull requests.
 
 ## Frontend Images
 
-_Add screenshots or visual representations of your frontend here._
+Images for the frontend are available in the images folder
 
 ## Contact
 
