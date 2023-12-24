@@ -19,6 +19,7 @@ import AdminLayout from './components/AdminLayout.jsx'
 import Profile from './components/User/Profile/Profile.jsx';
 
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<AuthLayout authentication={false}><Login /></AuthLayout>} />
       <Route path="/add-product" element={<AuthLayout authentication={true}><AdminLayout admin={true}><AddProducts /></AdminLayout></AuthLayout>} />
       <Route path="/update-product/:id" element={<AuthLayout authentication={true}><AdminLayout admin={true}><AddProducts /></AdminLayout></AuthLayout>} />
+  
       
 
       <Route path="/category" element={<Category />} />

@@ -20,14 +20,16 @@ This Ecommerce Project is a comprehensive solution with authentication features,
 - **User Authentication**: Ensures a secure authentication process using JWT tokens.
 - **Admin Functionality**: Admins can seamlessly add, update, and delete products.
 - **Product Management**: Efficiently manage product details, including images, for an enhanced user experience.
+- **AddCart** : Add to cart features available
+- **Comments**: Contains comments section for the product 
 - **Responsive UI**: Utilizes Shadcn UI and Dev UI for creating a visually appealing and responsive frontend.
 - **Database Integration**: MongoDB integration ensures efficient storage and retrieval of data.
 - **State Management**: Implements Redux Toolkit for effective state management in the frontend.
 
 ## Improvements and Missing Features
 
-- **Add to Cart Functionality**: The project currently lacks an "Add to Cart" functionality. Consider implementing this feature for a more complete shopping experience.
-  
+- **Quantity in add to cart**: Quantity parameter in cart section
+- **Slug: Slug can be used instead of the actual product id.The schema contains the slug . But i used id for fetching the product.
 - **Mobile Optimization**: The mobile responsiveness of the UI can be improved. Ensure a seamless user experience on various devices by optimizing the layout for smaller screens.
 
 *Note:* I am still working this missing features If any suggestions or any improvements in the project please let me know about it. You can reach me by the email link below in the contact section

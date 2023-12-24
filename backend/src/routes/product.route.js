@@ -18,9 +18,11 @@ router.patch('/update-productImages/:id',authUser,upload.array("productImage",3)
 router.delete('/delete-product/:id',authUser,ProductController.deleteProductById )
 router.post('/comment/:id', authUser,ProductController.addComment)
 router.get('/comments/:id', authUser,ProductController.getComments)
-
-
-
+router.patch('/update-comment', authUser, ProductController.updateComments)
+router.delete('/delete-comment/:id', authUser, ProductController.deleteComments)
+router.post('/add-cart/:id', authUser, ProductController.addToCart)
+router.get('/cart', authUser, ProductController.getCartProducts)
+router.delete('/cart/:id', authUser, ProductController.deleteCartProduct)
 
 
 export default router

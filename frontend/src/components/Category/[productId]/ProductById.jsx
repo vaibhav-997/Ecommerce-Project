@@ -42,7 +42,7 @@ function ProductById() {
     const getComments = async () => {
       setLoading(true);
       let res = await axios.get(`/api/v1/product/comments/${id}`);
-
+     
       if (res.data.success === true) {
         setFetchedComments(res.data.payload);
       }
@@ -87,14 +87,38 @@ function ProductById() {
 
 
   const handleSaveComment = async (commentId) => {
-    // Perform the save/update logic here
-    // You may use axios.put to update the comment on the server
-
+    const data = {
+      id:commentId,
+      comments:editedComment
+    }
+    let res = await axios.patch('/api/v1/product/update-comment',data)
+    toast({
+      description: res.data.message,
+    })
+    console.log(res.data.success)
+   
+      navigate(`/product/${id}`)
+   
     setEditingCommentId(null);
     setEditedComment("");
 
     // Add any additional logic you need after saving the comment
   };
+
+  const handleDeleteComment = async (id) => {
+    
+   let res =  await axios.delete(`/api/v1/product/delete-comment/${id}`)
+   toast({
+    description: res.data.message
+   })
+  }
+
+  const handleAddToCart = async (id) => {
+    let res = await axios.post(`/api/v1/product/add-cart/${id}`)
+    toast({
+      description: res.data.message
+    })
+  }
 
   return (
     <div>
@@ -156,6 +180,7 @@ function ProductById() {
                   ₹{product.productPrice}
                 </span>
                 <button
+                onClick={()=> handleAddToCart(product._id)}
                   type="button"
                   className="rounded-md mt-3 bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                 >
@@ -199,7 +224,7 @@ function ProductById() {
         </div>
 
         <div className="mx-auto max-w-5xl px-3 py-2">
-        {fetchedComments.map((comment) => (
+        {fetchedComments?.map((comment) => (
           <div key={comment._id}>
             {editingCommentId === comment._id ? (
               <div className="flex gap-2">
@@ -216,7 +241,7 @@ function ProductById() {
                 <Button onClick={() => handleSaveComment(comment._id)}>Save</Button>
               </div>
             ) : (
-              <p className="flex gap-2">
+              <div className="flex gap-2 mb-4">
                 <span>
                   <Avatar>
                     <AvatarImage className="cursor-pointer" src={user.avatar} />
@@ -229,10 +254,10 @@ function ProductById() {
                     <Button onClick={() => handleUpdateComment(comment._id, comment.comments)}>
                       Update
                     </Button>
-                    <Button>Delete</Button>
+                    <Button onClick={() => handleDeleteComment(comment._id)}>Delete</Button>
                   </div>
                 )}
-              </p>
+              </div>
             )}
           </div>
         ))}

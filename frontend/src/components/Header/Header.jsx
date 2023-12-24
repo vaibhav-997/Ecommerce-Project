@@ -9,6 +9,7 @@ import { useTheme } from "../themeProvider";
 import { useSelector } from "react-redux";
 
 import EditProfile from "../EditProfie/EditProfile";
+import Cart from "../Cart/Cart";
 
 
 
@@ -21,10 +22,7 @@ const menuItems = [
     name: "Category",
     href: "/category",
   },
-  {
-    name: "Contact",
-    href: "#",
-  },
+  
 ];
 
 export default function Header() {
@@ -78,9 +76,14 @@ export default function Header() {
                   } hover:${theme === "dark" ? "text-white" : "text-gray-900"}`}
                 >
                   {item.name}
-                </a>
+                </a>  
+                  
               </li>
+             
+            
+             
             ))}
+<Cart />
             {
                 user &&  user.role === "ADMIN" ?
                 <li className="cursor-pointer" onClick={() => navigate('/add-product')} >

@@ -3,6 +3,9 @@ import Joi from 'joi';
 import {uploadToCloudinary} from '../utils/cloudinary.js'
 import { deleteExistingCloudinaryImage } from "../utils/deleteCloudinaryExistingimage.js";
 import { Comments } from "../models/comment.model.js";
+import mongoose from "mongoose";
+import { Cart } from "../models/cart.model.js";
+import { User } from "../models/user.model.js";
 
 
 const productValidation  = Joi.object({
@@ -280,7 +283,11 @@ class ProductController {
     static async getComments(req, res){
         try {
             const id = req.params.id
-            const comments = await Comments.find({product:id}).populate("user")
+            const comments = await Comments.find({product:id}).populate("user").select("-password -refreshToken")
+           
+          
+    
+       
             if(!comments){
                 return res.json({ success:false, message:"Comments not found"})
     
@@ -288,6 +295,140 @@ class ProductController {
             return res.json({success:true, message:comments.length>0 ? "Comments found successfully":"This product dont have any comments", payload:comments})
         } catch (error) {
             return res.json({success:false, message:"error while fetching comments"})
+        }
+    }
+
+    // update comments from the product
+    static async updateComments(req, res){
+        try {
+            const {id,comments} = req.body 
+            if(!id || !comments){
+                return res.json({success:false, message:"Comments not found"})
+            }
+            const updateComments = await Comments.findByIdAndUpdate(id,{comments},{new:true})
+            if(!updateComments){
+                return res.json({success:false, message:"Failed to update comments"})
+            }
+            return res.json({success:true, message:"comments updated successfully"})
+        } catch (error) {
+            return res.json({success:false, message:"error while updating comments"})
+        }
+    }
+
+    // delete comments from the product
+    static async deleteComments(req, res){
+        try {
+            const {id} = req.params
+            if(!id ){
+                return res.json({success:false, message:"Invalid id"})
+            }
+            const deletedComment = await Comments.findByIdAndDelete(id,{new:true})
+            if(!deletedComment){
+                return res.json({success:false, message:"Failed to deleting commen"})
+            }
+            return res.json({success:true, message:"comments deleted successfully"})
+        } catch (error) {
+            return res.json({success:false, message:"error while deleting comment"})
+        }
+    }
+
+    // Add to cart method
+    static async addToCart(req, res){
+        try {
+            const {id} = req.params
+         
+            if(!id){
+                return res.json({success:false, message:"Invalid id"})
+            }
+            let cartProduct = await Cart.create({user:req.user._id, products:id})
+            if(!cartProduct){
+                return res.json({success:false, message:"Failed adding product to cart"})
+            }
+            return res.json({success:true, message:"Product successfully added to cart"})
+        } catch (error) {
+            return res.json({success:false, message:"Error adding product to cart"})
+        }
+    }   
+
+    // get cart products
+    static async getCartProducts(req, res){
+      
+       try {
+       
+         const cartProductsDetails = await User.aggregate([
+             {
+                 $match: {
+                     _id: new mongoose.Types.ObjectId(req.user._id)
+                 }
+             },
+             {
+                 $lookup: {
+                     from: "carts",
+                     localField: "_id",
+                     foreignField: "user",
+                     as: "cartProduct"
+                 }
+             },
+             {
+                 $unwind: "$cartProduct"
+             },
+             {
+                 $lookup: {
+                     from: "products",
+                     localField: "cartProduct.products",
+                     foreignField: "_id",
+                     as: "productDetails"
+                 }
+             },
+             {
+                 $unwind: "$productDetails"
+             },
+             {
+                 $project: {
+                     "productDetails.productImage": 1,
+                     "productDetails.productName": 1,
+                     "productDetails.productPrice": 1,
+                     "productDetails._id": 1,
+                     "productDetails.quantity": 1
+                 }
+             },
+             {
+                 $group: {
+                     _id: "$_id", // Group by user
+                     productTotal: { $sum: "$productDetails.productPrice" },
+                     products: { $push: "$productDetails" }
+                 }
+             },
+             
+         ]
+         )
+       
+         if(!cartProductsDetails ){
+             return res.json({success: false, message: "Cart dont have products"})
+         }
+ 
+         return res.json({success: true, payload:cartProductsDetails,message:cartProductsDetails.length === 0 ? "Dont have products in the cart":"Cart products fecthed successfully"})
+       } catch (error) {
+        return res.json({success: false, message:"Error fecthing the cart products"})
+       }
+    }
+
+
+    // delete cart products
+    static async deleteCartProduct(req, res){
+        try {
+            const id = req.params.id
+            if(!id){
+                return res.json({success:false, message:"Invalid id"})
+            }
+            let deletedProduct = await Cart.findOneAndDelete({products:id})
+            console.log(deletedProduct)
+            if(!deletedProduct){
+                return res.json({success:false, message:"Product deletion failed"})
+            }
+            return res.json({success:true, message:"Deleted Product from cart"})
+        } catch (error) {
+            return res.json({success:false, message:"Error deleting product from cart"})
         }
     }
 }
