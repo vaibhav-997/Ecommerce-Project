@@ -93,7 +93,7 @@ export default function Cart() {
                   <li className="flex items-center justify-between text-gray-900">
                     <p className="text-sm font-medium ">Total</p>
                     <p className="text-sm font-bold ">
-                      ₹{products.productTotal}
+                      ₹{products?.productTotal}
                     </p>
                   </li>
                 </ul>
